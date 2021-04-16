@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { APP_INITIALIZER, NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -10,6 +10,12 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
+import { AppInitService } from '../providers/app-init.service';
+import { TouchIdProvider } from '../providers/TouchIdProvider';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+// import { SecureStorageEcho } from '@ionic-native/secure-storage-echo/ngx';
+// import { StorageService } from '../providers/storage.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +40,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    // SecureStorageEcho,
+    // StorageService,
+    AppInitService,
+    TouchIdProvider,
+    FingerprintAIO,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (appInitService: AppInitService) => () => appInitService.Init(),
+      deps: [AppInitService],
+      multi: true
+    }
   ]
 })
 export class AppModule {}
